@@ -11,18 +11,36 @@ exports.getProducts = async (req, res) => {
 };
 
 exports.getProductsById = async (req, res) => {
+    const {id} = req.params;
+
     try {
-
+        const produtoPorId = await prisma.products.findUnique({
+            where: { id: Number(id)},
+        });
+        if (produtoPorId) {
+            res.status(200).json(produtoPorId);
+        } else {
+            res.status(404).json({message: 'Produto não encontrado'});
+        }
     } catch (error) {
-
+        res.status(500).json({error: 'Erro ao buscar o produto'});
     }
 };
 
 exports.createProduct = async (req, res) => {
+    const {type, quantity, price, categoryId} = req.body
     try {
-
+        const novoProduto = await prisma.products.create({
+            data: {
+                type,
+                quantity,
+                price,
+                categoryId
+            },
+        });
+        res.status(201).json(novoProduto);
     } catch (error) {
-
+        res.status(400).json({error: 'Erro ao adicionar produto'})
     }
 };
 

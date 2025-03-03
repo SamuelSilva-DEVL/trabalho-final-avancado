@@ -18,6 +18,7 @@ model Products {
   type        String
   quantity  Int
   price       Decimal
+  image      String @default("aqui_será_uma_url")
   categoryId Int
   category   Categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
