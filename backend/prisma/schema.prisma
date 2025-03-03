@@ -26,5 +26,4 @@ model Categories {
   id   Int   @id @default(autoincrement())
   nome String @unique
   product Products[]
-
 }
