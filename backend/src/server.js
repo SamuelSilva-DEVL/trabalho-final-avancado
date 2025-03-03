@@ -1,5 +1,5 @@
 const http = require('http');  // Importa o módulo HTTP nativo do Node.js
-const express = require("express")
+// const express = require("express")
 // const app = express()
 // const routes = require("./routes")
 
