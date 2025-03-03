@@ -1,6 +1,6 @@
 const express = require('express');
 const productRoutes = require('./routes/productRoutes');
-const middlewaresLogs = require('./middlewares/debugMiddleware')
+const middlewaresLogs = require('./middlewares/debugMiddleware');
 const app = express();
 // const cors = require('cors');
 
