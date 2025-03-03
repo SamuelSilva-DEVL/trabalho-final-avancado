@@ -12,3 +12,19 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Products {
+  id          Int       @id @default(autoincrement())
+  type        String
+  quantity  Int
+  price       Decimal
+  categoryId Int
+  category   Categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+model Categories {
+  id   Int   @id @default(autoincrement())
+  nome String @unique
+  product Products[]
+
+}
