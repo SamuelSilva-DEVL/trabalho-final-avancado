@@ -1,5 +1,6 @@
 const express = require('express');
 const productRoutes = require('./routes/productRoutes');
+const categoriesRoutes = require('./routes/categoriesRoutes')
 const middlewaresLogs = require('./middlewares/debugMiddleware');
 const app = express();
 // const cors = require('cors');
@@ -12,6 +13,7 @@ app.use(middlewaresLogs.logRequisicao)
 
 // Usando as rotas dos produtos
 app.use("/api", productRoutes);
+app.use("/api", categoriesRoutes)
 
 // Para capturar requisições desconhecidas
 app.use((req, res) => {
