@@ -3,15 +3,16 @@ import { useNavigate } from "react-router-dom"
 import BasicTable from "../../components/Table"
 import Button from "@mui/material/Button"
 import { deleteProductForCategorie } from "@utils"
+import { getProducts } from "../../services/productsServices"
 
 import styles from "./styles.module.css"
 
 const headers = [
-  { field: "product", headerName: "Produto" },
-  { field: "categorie", headerName: "Categoria" },
+  { field: "product_name", headerName: "Produto" },
+  { field: "category", headerName: "Categoria" },
   { field: "description", headerName: "Descrição" },
-  { field: "value", headerName: "Valor" },
-  { field: "stock", headerName: "Quantidade em estoque" },
+  { field: "valor", headerName: "Valor" },
+  { field: "quantity_stock", headerName: "Quantidade em estoque" },
   { field: "actions", headerName: "Ações" },
 ]
 
@@ -20,41 +21,32 @@ export function Products() {
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
-  const listProducts = JSON.parse(localStorage.getItem("produtos")) || []
-
-  const updateItemsTable = (list) => {
+  const fetchListProducts = async () => {
     setIsLoading(true)
-
-    //simulando um loading para atualizar estado da tabela
-    setTimeout(() => {
-      const rows =
-        list.map((product) => ({
-          id: product.id,
-          product: product.name,
-          description: product.description,
-          value: product.value,
-          stock: product.stock,
-          categorie: product.categorie,
-        })) ?? []
-
-      setProducts(rows)
+    try {
+      const response = await getProducts()
+      
+      setProducts(response)
+    } catch (error) {
+      console.error("Error fetching data:", error)
+    } finally{
       setIsLoading(false)
-    }, 2 * 1000)
+    }
   }
 
-  const deleteProduct = (productData) => {
-    const newProducts = listProducts.filter(
-      (product) => product.id !== productData.id
-    )
-    localStorage.setItem("produtos", JSON.stringify(newProducts))
+  // const deleteProduct = (productData) => {
+  //   const newProducts = listProducts.filter(
+  //     (product) => product.id !== productData.id
+  //   )
+  //   localStorage.setItem("produtos", JSON.stringify(newProducts))
 
-    deleteProductForCategorie(productData)
+  //   deleteProductForCategorie(productData)
 
-    updateItemsTable(newProducts)
-  }
+  //   updateItemsTable(newProducts)
+  // }
 
   useEffect(() => {
-    updateItemsTable(listProducts)
+    fetchListProducts()
   }, [])
 
   return (
@@ -79,7 +71,7 @@ export function Products() {
           headers={headers}
           rows={products}
           routeEdition="/administrador/editar-produto"
-          deleteProduct={deleteProduct}
+          // deleteProduct={deleteProduct}
         />
       )}
     </section>

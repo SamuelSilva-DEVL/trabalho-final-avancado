@@ -12,3 +12,19 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum CategoryEnum {
+  SNEAKERS
+  TENIS_PARA_CORRIDA
+  TENIS_PARA_ACADEMIA
+  CASUAL
+}
+
+model products {
+  id  Int @id @default(autoincrement())
+  product_name String @db.VarChar(200)
+  category CategoryEnum
+  description String @db.VarChar(255)
+  valor Int
+  quantity_stock Int
+}
