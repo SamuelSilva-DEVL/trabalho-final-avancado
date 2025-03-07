@@ -13,34 +13,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum CategoryEnum {
-  SNEAKERS
-  TENIS_PARA_CORRIDA
-  TENIS_PARA_ACADEMIA
-  CASUAL
-}
 
 model products {
   id  Int @id @default(autoincrement())
   product_name String @db.VarChar(200)
-  category CategoryEnum
+  categoryId Int
+  category Categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   description String @db.VarChar(255)
   valor Int
   quantity_stock Int
 }
 
-model Products {
-  id          Int       @id @default(autoincrement())
-  type        String
-  quantity  Int
-  price       Decimal
-  image      String @default("aqui_será_uma_url")
-  categoryId Int
-  category   Categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-}
-
 model Categories {
   id   Int   @id @default(autoincrement())
   nome String @unique
-  product Products[]
+  product products[]
 }
