@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import BasicTable from "../../components/Table"
 import Button from "@mui/material/Button"
 import { deleteProductForCategorie } from "@utils"
-import { getProducts } from "../../services/productsServices"
+import { getProducts, deleteProduct } from "../../services/productsServices"
 
 import styles from "./styles.module.css"
 
@@ -25,25 +25,20 @@ export function Products() {
     setIsLoading(true)
     try {
       const response = await getProducts()
-      
+
       setProducts(response)
     } catch (error) {
       console.error("Error fetching data:", error)
-    } finally{
+    } finally {
       setIsLoading(false)
     }
   }
 
-  // const deleteProduct = (productData) => {
-  //   const newProducts = listProducts.filter(
-  //     (product) => product.id !== productData.id
-  //   )
-  //   localStorage.setItem("produtos", JSON.stringify(newProducts))
+  const deleteProductInTable = async (productData) => {
+    await deleteProduct(productData.id)
 
-  //   deleteProductForCategorie(productData)
-
-  //   updateItemsTable(newProducts)
-  // }
+    fetchListProducts()
+  }
 
   useEffect(() => {
     fetchListProducts()
@@ -71,7 +66,7 @@ export function Products() {
           headers={headers}
           rows={products}
           routeEdition="/administrador/editar-produto"
-          // deleteProduct={deleteProduct}
+          deleteProduct={deleteProductInTable}
         />
       )}
     </section>
