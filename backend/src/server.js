@@ -1,14 +1,14 @@
-const app = require('./app');
-// require('dotenv').config();
+const express = require("express")
+const app = express()
+const cors = require("cors")
+const routes = require("./routes")
 
-const PORT = process.env.PORT || 3000;
-//rodar o servidor
-app.listen(PORT, () => console.log(`O servidor está rodando na porta ${PORT}`));
+const PORT = 3000
 
-// // Função que será chamada para cada requisição recebida
-// const servidor = http.createServer((req, res) => {
-//   res.statusCode = 200;  // Define o status HTTP como "OK"
-//   res.setHeader('Content-Type', 'text/plain');  // Define o cabeçalho da resposta
-//   res.end('Bem-vindo ao meu servidor Node.js!');  // Envia a resposta ao cliente
-// });
+app.use(cors())
+app.use(express.json())
+app.use("/", routes)
 
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
