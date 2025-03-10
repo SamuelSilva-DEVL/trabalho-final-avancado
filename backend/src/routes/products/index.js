@@ -7,7 +7,7 @@ const {
   getProductbyId,
   updateProduct,
   deleteProduct,
-} = require("../../../controllers/produtctController")
+} = require("../../controllers/productController")
 
 router.get("/products", async (req, res) => {
   const data = await getProducts()
