@@ -1,9 +1,10 @@
 const prisma = require("../config/prismaClient");
+const { Categories } = require("../models/categoryModel");
 
 
 exports.getCategories = async (req, res) => {
     try {
-        const todasCategorias = await prisma.categories.findMany();
+        const todasCategorias = await Categories.findMany();
         res.status(200).json(todasCategorias);
     } catch (error) {
         console.error("erro ao buscar produtos:", error)
@@ -15,7 +16,7 @@ exports.getCategoriesById = async (req, res) => {
     const {id} = req.params;
 
     try {
-        const categoriaPorId = await prisma.categories.findUnique({
+        const categoriaPorId = await Categories.findUnique({
             where: { id: Number(id)},
         });
         if (categoriaPorId) {
@@ -31,7 +32,7 @@ exports.getCategoriesById = async (req, res) => {
 exports.createCategory = async (req, res) => {
     const {nome} = req.body
     try {
-        const novaCategoria = await prisma.categories.create({
+        const novaCategoria = await Categories.create({
             data: {
                 nome
             },
@@ -46,7 +47,7 @@ exports.updateCategory = async (req, res) => {
     const {id} = req.params;
     const { nome } = req.body;
     try {
-        const categoriaEditada = await prisma.categories.update({
+        const categoriaEditada = await Categories.update({
             where: {id: Number(id)},
             data: {
                 nome
@@ -63,7 +64,7 @@ exports.updateCategory = async (req, res) => {
 exports.deleteCategories = async (req, res) => {
     const {id} = req.params;
     try {
-        await prisma.categories.delete({
+        await Categories.delete({
             where: {id: Number(id)},
         });
         res.status(204).send();
