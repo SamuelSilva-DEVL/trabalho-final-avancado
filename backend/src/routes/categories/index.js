@@ -1,70 +1,77 @@
 const express = require("express");
 const router = express.Router();
+const categoriesController = require('../../controllers/categoriesController')
 
-const {
-  getCategories,
-  createCategory,
-  getCategoriesById,
-  updateCategory,
-  deleteCategories,
-} = require("../../controllers/categoriesController");
+router.get("/categories", categoriesController.getCategories);
+router.get("/categories/:id", categoriesController.getCategoriesById);
+router.post("/categories", categoriesController.createCategory);
+router.put("/categories/:id", categoriesController.updateCategory);
+router.delete("/categories/:id", categoriesController.deleteCategories);
 
-router.get("/categories", async (req, res) => {
-  const data = await getCategories();
+// const {
+//   getCategories,
+//   createCategory,
+//   getCategoriesById,
+//   updateCategory,
+//   deleteCategories,
+// } = require("../../controllers/categoriesController");
 
-  res.status(200).json(data);
-});
+// router.get("/categories", async (req, res) => {
+//   const data = await getCategories();
 
-router.get("/categories/:id", async (req, res) => {
-  const id_categories = parseInt(req.params.id);
+//   res.status(200).json(data);
+// });
 
-  const findCategory = await getCategoriesById(id_categories);
+// router.get("/categories/:id", async (req, res) => {
+//   const id_categories = parseInt(req.params.id);
 
-  if (!findCategory) {
-    return res.status(404).json({ message: "Categoria não encontrada." });
-  }
+//   const findCategory = await getCategoriesById(id_categories);
 
-  res.status(200).json(findCategory);
-});
+//   if (!findCategory) {
+//     return res.status(404).json({ message: "Categoria não encontrada." });
+//   }
 
-router.post("/categories", async (req, res) => {
-  const data = await createCategory(req.body);
+//   res.status(200).json(findCategory);
+// });
 
-  res.status(200).json(data);
-});
+// router.post("/categories", async (req, res) => {
+//   const data = await createCategory(req.body);
 
-router.put("/categories/:id", async (req, res) => {
-  const id_categories = parseInt(req.params.id);
+//   res.status(200).json(data);
+// });
 
-  const findCategory = await getCategoriesById(id_categories);
+// router.put("/categories/:id", async (req, res) => {
+//   const id_categories = parseInt(req.params.id);
 
-  if (!findCategory) {
-    return res.status(404).json({ message: "Categoria não encontrado." });
-  }
+//   const findCategory = await getCategoriesById(id_categories);
 
-  const dataUpdate = await updateCategory(id_categories, req.body);
+//   if (!findCategory) {
+//     return res.status(404).json({ message: "Categoria não encontrado." });
+//   }
 
-  res
-    .status(200)
-    .json({ message: "Categoria atualizada com sucesso", data: dataUpdate });
-});
+//   const dataUpdate = await updateCategory(id_categories, req.body);
 
-router.delete("/categories/:id", async (req, res) => {
-  const id_categories = parseInt(req.params.id);
+//   res
+//     .status(200)
+//     .json({ message: "Categoria atualizada com sucesso", data: dataUpdate });
+// });
 
-  try {
-    const findCategory = await getCategoriesById(id_categories);
+// router.delete("/categories/:id", async (req, res) => {
+//   const id_categories = parseInt(req.params.id);
 
-    if (!findCategory) {
-      return res.status(404).json({ message: "Categoria não encontrada." });
-    }
+//   try {
+//     const findCategory = await getCategoriesById(id_categories);
 
-    await deleteCategories(id_categories);
+//     if (!findCategory) {
+//       return res.status(404).json({ message: "Categoria não encontrada." });
+//     }
 
-    res.status(200).json({ message: "Categoria deletada com sucesso" });
-  } catch (error) {
-    res.status(500).json({ message: "Erro ao apagar a Categoria", error });
-  }
-});
+//     await deleteCategories(id_categories);
+
+//     res.status(200).json({ message: "Categoria deletada com sucesso" });
+//   } catch (error) {
+//     res.status(500).json({ message: "Erro ao apagar a Categoria", error });
+//   }
+// });
 
 module.exports = router;
