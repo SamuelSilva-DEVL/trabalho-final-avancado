@@ -31,7 +31,7 @@ try {
   const formattedStock = showStock.map(stockItem => ({
     categoryName: categories.find(cat => cat.id === stockItem.categoryId)?.nome || "Desconhecido",
     totalStock: stockItem._sum.quantity_stock,
-    avarageValues: stockItem._avg.valor
+    averageValues: stockItem._avg.valor
   }));
   res.json(formattedStock);
 
