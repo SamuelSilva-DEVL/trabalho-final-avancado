@@ -82,7 +82,7 @@ export function CreateOrEditProduct() {
       description: formData.description,
       valor: formData.valor,
       quantity_stock: formData.quantity_stock,
-      categoryId: formData.category,
+      categoryId: formData.categoryId,
     }
 
     await createProduct(data).then(() => {
@@ -98,7 +98,7 @@ export function CreateOrEditProduct() {
       description: formData.description,
       valor: formData.valor,
       quantity_stock: formData.quantity_stock,
-      category: formData.category,
+      categoryId: formData.categoryId,
     }
 
     await updateProduct(id, data).then(() => {
@@ -131,7 +131,7 @@ export function CreateOrEditProduct() {
         description: product.description,
         valor: product.valor,
         quantity_stock: product.quantity_stock,
-        category: product.category,
+        categoryId: product.categoryId,
       }
 
       setFormData(data)
@@ -247,7 +247,7 @@ export function CreateOrEditProduct() {
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             label="Categoria"
-            name="category"
+            name="categoryId"
             value={formData.categoryId}
             onChange={handleChange}
           >

@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react"
 import BasicTable from "../../components/Table"
-
 import styles from "../Products/styles.module.css"
 
 const headers = [
-  { field: "categorie", headerName: "Categoria produto" },
+  { field: "categoryName", headerName: "Categoria produto" },
   { field: "averageValue", headerName: "Valor médio" },
-  { field: "number", headerName: "Quantidade em estoque" },
+  { field: "totalStock", headerName: "Quantidade em estoque" },
 ]
 
 export function Stock() {
   const [stock, setStock] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
-  const listStock = JSON.parse(localStorage.getItem("stock")) || []
+  // const listStock = JSON.parse(localStorage.getItem("stock")) || []
 
   const updateItemsTable = (list) => {
     setIsLoading(true)
