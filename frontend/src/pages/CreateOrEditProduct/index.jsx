@@ -43,7 +43,7 @@ export function CreateOrEditProduct() {
     setCategories(fetch);
   }
 
-  const storedProducts = JSON.parse(localStorage.getItem("produtos")) || []
+  // const storedProducts = JSON.parse(localStorage.getItem("produtos")) || []
 
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
