@@ -9,69 +9,74 @@ afterAll(async () => {
 describe("Testes das rotas de Produtos", () => {
   let produtoId;
 
-  // Teste para a rota POST /pokemons
+  // Teste para a rota POST /api/products
   it("Deve criar um novo Produto", async () => {
-    const response = await request(app).post("/api/products").send({
-      product_name: "Teste_Automatizado_Tenis001",
-      categoryId: 2,
-      description: "jajajajajajja",
-      valor: 345,
-      quantity_stock: 23,
+    const response = await request(app).post("/api/products")
+    .send({
+      product_name: "Teste_Automatizado_Tenis006",
+      categoryId: 1,
+      description: "gadfgagfafg",
+      valor: 500,
+      quantity_stock: 25,
     });
 
     expect(response.status).toBe(201); // 201 representando que o objeto foi criado no servidor.
     expect(response.body).toHaveProperty("id");
-    produtoId = response.body.id; // Salva o ID para usar nos próximos testes
+    produtoId = response.body.id; 
+   // Salva o ID para usar nos próximos testes
   });
 
-//   // Teste para a rota GET /pokemons
-//   ("Deve retornar a lista de Pokémons", async () => {
-//     const response = await request(app).get("/pokemons");
+  // Teste para a rota GET /api/products
+  it("Deve retornar a lista de Produtos", async () => {
+    const response = await request(app).get("/api/products");
 
-//     expect(response.status).toBe(200);
-//     expect(Array.isitArray(response.body)).toBe(true);
-//     const arrayPokemons = response.body;
-//     let pokemonPresente = false;
-//     arrayPokemons.forEach((pokemon) => {
-//       if (pokemon.id_pokemon === pokemonId) pokemonPresente = true;
-//     });
-//     expect(pokemonPresente).toBe(true);
-//   });
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+    const arrayProdutos = response.body;
+    let produtoPresente = false;
+    arrayProdutos.forEach((produto) => {
+      if (produto.id === produtoId) produtoPresente = true;
+    });
+    expect(produtoPresente).toBe(true);
+  });
 
-//   // Teste para a rota PUT /pokemons/:idPokemon
-//   it("Deve atualizar um Pokémon existente", async () => {
-//     const response = await request(app).put(`/pokemons/${pokemonId}`).send({
-//       nome: "Skitty NOVO NOME",
-//       tipo: "Psiquico",
-//       raridade: "Raro",
-//       preco: 2222,
-//       img_url:
-//         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/300.png",
-//     });
+    // Teste para a rota PUT api/products/:id
+    it("Deve atualizar um Produto existente", async () => {
+        // console.log("O ID do produto é:",produtoId);
+      const response = await request(app)
+      .put(`/api/products/${produtoId}`)
+      .send({
+        product_name: "Teste_Automatizado_EditadoPUT",
+        categoryId: 2,
+        description: "jajajajajajja",
+        valor: 355,
+        quantity_stock: 33,
+      });
+    //   console.log(response.status, response.body.product_name);
+      expect(response.status).toBe(200);
+      expect(response.body.data.product_name).toBe("Teste_Automatizado_EditadoPUT");
+    });
 
-//     expect(response.status).toBe(200);
-//     expect(response.body.nome).toBe("Skitty NOVO NOME");
-//   });
+    // Teste para a rota DELETE /api/products/:id
+    it("Deve deletar um Produto existente", async () => {
+      const response = await request(app).delete(`/api/products/${produtoId}`);
 
-//   // Teste para a rota DELETE /pokemons/:idPokemon
-//   it("Deve deletar um Pokémon existente", async () => {
-//     const response = await request(app).delete(`/pokemons/${pokemonId}`);
+      expect(response.status).toBe(200);
+      console.log("response do delete", response.body);
+    //   expect(response.body.id).toBe(produtoId);
+    });
 
-//     expect(response.status).toBe(200);
-//     expect(response.body.id_pokemon).toBe(pokemonId);
-//   });
+    // Validar que o Pokemon foi deletado com sucesso
+    it("Deve retornar a lista de Produtos sem o Produto deletado", async () => {
+      const response = await request(app).get("/api/products");
 
-//   // Validar que o Pokemon foi deletado com sucesso
-//   it("Deve retornar a lista de Pokémons sem o Pokemon deletado", async () => {
-//     const response = await request(app).get("/pokemons");
-
-//     expect(response.status).toBe(200);
-//     expect(Array.isArray(response.body)).toBe(true);
-//     const arrayPokemons = response.body;
-//     let pokemonPresente = false;
-//     arrayPokemons.forEach((pokemon) => {
-//       if (pokemon.id_pokemon === pokemonId) pokemonPresente = true;
-//     });
-//     expect(pokemonPresente).toBe(false);
-//   });
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.body)).toBe(true);
+      const arrayProdutos = response.body;
+      let produtoPresente = false;
+      arrayProdutos.forEach((produto) => {
+        if (produto.id === produtoId) produtoPresente = true;
+      });
+      expect(produtoPresente).toBe(false);
+    });
 });
