@@ -48,7 +48,7 @@ exports.updateCategory = async (req, res) => {
     const { nome } = req.body;
     try {
         const categoriaEditada = await Categories.update({
-            where: {id: Number(id)},
+            where: {id: parseInt(id)},
             data: {
                 nome
             },
