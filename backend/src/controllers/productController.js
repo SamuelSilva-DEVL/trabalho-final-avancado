@@ -1,10 +1,26 @@
 const { Products } = require("../models/productModel")
 
 const getProducts = async () => {
-  const response = await Products.findMany()
+  const response = await Products.findMany({
+    include: {
+      category: {
+        select: { nome: true }
+      }
+    }
+  });
+  
 
-  return response
-}
+  // Reformata a resposta para remover o objeto "category"
+  return response.map(product => ({
+    id: product.id,
+    product_name: product.product_name,
+    categoryName: product.category.nome, // Usa "nome" da categoria
+    description: product.description,
+    valor: product.valor,
+    quantity_stock: product.quantity_stock
+  }));
+};
+
 
 const getProductbyId = async (id) => {
   const id_product = parseInt(id)

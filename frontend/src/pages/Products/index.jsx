@@ -9,7 +9,7 @@ import styles from "./styles.module.css"
 
 const headers = [
   { field: "product_name", headerName: "Produto" },
-  { field: "category", headerName: "Categoria" },
+  { field: "categoryName", headerName: "Categoria" },
   { field: "description", headerName: "Descrição" },
   { field: "valor", headerName: "Valor" },
   { field: "quantity_stock", headerName: "Quantidade em estoque" },

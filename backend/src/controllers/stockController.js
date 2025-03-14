@@ -1,42 +1,42 @@
-const prisma = require("../config/prismaClient");
+const {Stock} = require('../models/stockModel')
+//está referenciando prisma.products
+const { PrismaClient } = require("@prisma/client")
+const prisma = new PrismaClient()
 
 // no prisma não é possivel criar uma View, então é melhor criar um visualizador para o estoque, já que não necessita o log de novos dados.
 
-exports.stock = async (req, res) => {
-  const showStock = await prisma.products.groupBy({
+exports.getStock = async (req, res) => {
+try {
+  const showStock = await Stock.groupBy({
     by: ["categoryId"],
     _sum: {
-      quantity: true,
+      quantity_stock: true,
     },
     _avg: {
-      price: true,
+      valor: true,
     },
     orderBy: {
       categoryId: "asc",
     },
   });
-  res.json(showStock)
+
+  //pegando os nomes das categorias
+  const categories = await prisma.categories.findMany({
+    select: {
+      id: true,
+      nome: true
+    }
+  });
+
+  const formattedStock = showStock.map(stockItem => ({
+    categoryName: categories.find(cat => cat.id === stockItem.categoryId)?.nome || "Desconhecido",
+    totalStock: stockItem._sum.quantity_stock,
+    avarageValues: stockItem._avg.valor
+  }));
+  res.json(formattedStock);
+
+} catch (error) {
+  console.error('Erro ao buscar estoque:', error);
+  res.status(500).json({error: "Erro ao buscar estoque."});
 };
-// console.log(stock);
-
-
-// OU, na própria máquina, utilizar este comando para criar um view no postgresql e acessá-lo, em conseguinte, pelo prisma, utilizando o código abaixo:
-
-// CREATE VIEW stock AS
-// SELECT
-//     p.categoryId,
-//     c.nome AS category_name,
-//     SUM(p.quantity) AS total_quantity,
-//     AVG(p.price) AS medium_price
-// FROM Products p
-// JOIN Categories c ON p.categoryId = c.id
-// GROUP BY p.categoriaId, c.nome;
-
-// model Stock {
-//     categoryId   Int
-//     categoryName String
-//     totalQuantity Int?
-//     mediumPrice    Decimal?
-
-//     @@ignore // Evita que o Prisma tente modificar a View
-//   }
+};

@@ -12,7 +12,7 @@ export async function createProduct(data) {
     description: data.description,
     valor: parseFloat(data.valor),
     quantity_stock: Number(data.quantity_stock),
-    category: data.category,
+    categoryId: data.categoryId,
   }
 
   const response = await api.post("/api/products", dataNewProduct)

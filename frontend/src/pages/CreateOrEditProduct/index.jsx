@@ -16,30 +16,13 @@ import {
   getProductbyId,
   updateProduct,
 } from "../../services/productsServices"
+import {
+  getCategories,
+  getCategoriesById
+}
+from "../../services/categoriesSevices"
 import { toast } from "react-toastify"
 
-const optionsCategories = [
-  {
-    id: 1,
-    label: "SNEAKERS",
-    value: "SNEAKERS",
-  },
-  {
-    id: 2,
-    label: "TENIS_PARA_CORRIDA",
-    value: "TENIS_PARA_CORRIDA",
-  },
-  {
-    id: 3,
-    label: "TENIS_PARA_ACADEMIA",
-    value: "TENIS_PARA_ACADEMIA",
-  },
-  {
-    id: 4,
-    label: "CASUAL",
-    value: "CASUAL",
-  },
-]
 
 export function CreateOrEditProduct() {
   const { id } = useParams()
@@ -50,8 +33,15 @@ export function CreateOrEditProduct() {
     valor: 0,
     quantity_stock: 0,
     image: null,
-    category: "",
+    categoryId: 0,
   })
+
+  const [optionsCategories, setCategories] = useState ([]);
+
+  const fetchCategories = async () => {
+    const fetch = await getCategories();
+    setCategories(fetch);
+  }
 
   const storedProducts = JSON.parse(localStorage.getItem("produtos")) || []
 
@@ -92,7 +82,7 @@ export function CreateOrEditProduct() {
       description: formData.description,
       valor: formData.valor,
       quantity_stock: formData.quantity_stock,
-      category: formData.category,
+      categoryId: formData.category,
     }
 
     await createProduct(data).then(() => {
@@ -149,6 +139,7 @@ export function CreateOrEditProduct() {
   }
 
   useEffect(() => {
+    fetchCategories();
     if (id) {
       fetchProductById(id)
     }
@@ -257,12 +248,12 @@ export function CreateOrEditProduct() {
             id="demo-simple-select"
             label="Categoria"
             name="category"
-            value={formData.category}
+            value={formData.categoryId}
             onChange={handleChange}
           >
             {optionsCategories.map((option) => (
-              <MenuItem key={option.value} value={option.label}>
-                {option.label}
+              <MenuItem key={option.nome} value={option.id}>
+                {option.nome}
               </MenuItem>
             ))}
           </Select>
