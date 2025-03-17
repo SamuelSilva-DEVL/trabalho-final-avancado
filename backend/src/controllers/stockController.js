@@ -24,13 +24,13 @@ try {
   const categories = await prisma.categories.findMany({
     select: {
       id: true,
-      nome: true,
+      name: true,
     },
   })
 
   const formattedStock = showStock.map((stockItem) => ({
     categoryName:
-      categories.find((cat) => cat.id === stockItem.categoryId)?.nome ||
+      categories.find((cat) => cat.id === stockItem.categoryId)?.name ||
       "Desconhecido",
     totalStock: stockItem._sum.quantity_stock,
     averageValues: stockItem._avg.price,

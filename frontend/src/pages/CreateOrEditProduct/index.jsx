@@ -104,7 +104,7 @@ export function CreateOrEditProduct() {
         price: product.price,
         quantity_stock: product.quantity_stock,
         categoryId: product.categoryId,
-        image: formData.image,
+        image: product.image,
       }
 
       setFormData(data)
@@ -194,8 +194,8 @@ export function CreateOrEditProduct() {
             onChange={handleChange}
           >
             {optionsCategories.map((option) => (
-              <MenuItem key={option.nome} value={option.id}>
-                {option.nome}
+              <MenuItem key={option.name} value={option.id}>
+                {option.name}
               </MenuItem>
             ))}
           </Select>

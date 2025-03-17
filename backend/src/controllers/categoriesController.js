@@ -30,11 +30,11 @@ exports.getCategoriesById = async (req, res) => {
 };
 
 exports.createCategory = async (req, res) => {
-    const {nome} = req.body
+    const {name} = req.body
     try {
         const novaCategoria = await Categories.create({
             data: {
-                nome
+                name
             },
         });
         res.status(201).json(novaCategoria);
@@ -45,12 +45,12 @@ exports.createCategory = async (req, res) => {
 
 exports.updateCategory = async (req, res) => {
     const {id} = req.params;
-    const { nome } = req.body;
+    const { name } = req.body;
     try {
         const categoriaEditada = await Categories.update({
             where: {id: parseInt(id)},
             data: {
-                nome
+                name
             },
     });
         res.status(200).json(categoriaEditada);

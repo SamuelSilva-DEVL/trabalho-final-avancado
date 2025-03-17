@@ -20,13 +20,13 @@ model products {
   categoryId Int
   category Categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   description String @db.VarChar(255)
-  price Int
+  price Decimal
   quantity_stock Int
   image String @default("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8lRbS7eKYzDq-Ftxc1p8G_TTw2unWBMEYUw&s")
 }
 
 model Categories {
   id   Int   @id @default(autoincrement())
-  nome String @unique
+  name String @unique
   product products[]
 }
