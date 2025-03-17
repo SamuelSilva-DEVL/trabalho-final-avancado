@@ -10,9 +10,10 @@ export async function createProduct(data) {
   const dataNewProduct = {
     product_name: data.product_name,
     description: data.description,
-    valor: parseFloat(data.valor),
+    price: parseFloat(data.price),
     quantity_stock: Number(data.quantity_stock),
     categoryId: data.categoryId,
+    image: data.image,
   }
 
   const response = await api.post("/api/products", dataNewProduct)
@@ -30,9 +31,10 @@ export async function updateProduct(id, data) {
   const dataUpdateProduct = {
     product_name: data.product_name,
     description: data.description,
-    valor: parseFloat(data.valor),
+    price: parseFloat(data.price),
     quantity_stock: Number(data.quantity_stock),
     category: data.category,
+    image: data.image,
   }
 
   const response = await api.put(`/api/products/${id}`, dataUpdateProduct)

@@ -4,21 +4,25 @@ const getProducts = async () => {
   const response = await Products.findMany({
     include: {
       category: {
-        select: { nome: true, id: true }
+        select: { name: true, id: true }
       }
-    }
+    },
+    orderBy: {
+      id: "asc",
+    },
   });
   
   // Reformata a resposta para remover o objeto "category"
-  return response.map(product => ({
+  return response.map((product) => ({
     id: product.id,
     product_name: product.product_name,
     categoryId: product.category.id,
-    categoryName: product.category.nome, // Usa "nome" da categoria
+    categoryName: product.category.name, // Usa "nome" da categoria
     description: product.description,
-    valor: product.valor,
-    quantity_stock: product.quantity_stock
-  }));
+    price: product.price,
+    quantity_stock: product.quantity_stock,
+    image: product.image,
+  }))
 };
 
 

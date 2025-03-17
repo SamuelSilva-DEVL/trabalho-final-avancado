@@ -11,8 +11,8 @@ const headers = [
   { field: "product_name", headerName: "Produto" },
   { field: "categoryName", headerName: "Categoria" },
   { field: "description", headerName: "Descrição" },
-  { field: "valor", headerName: "Valor" },
-  { field: "quantity_stock", headerName: "Quantidade em estoque" },
+  { field: "price", headerName: "Valor" },
+  { field: "quantity_stock", headerName: "Estoque" },
   { field: "actions", headerName: "Ações" },
 ]
 

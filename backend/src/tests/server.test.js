@@ -15,7 +15,7 @@ describe("Testes das rotas de Produtos", () => {
       product_name: "Teste_Automatizado_Tenis006",
       categoryId: 1,
       description: "gadfgagfafg",
-      valor: 500,
+      price: "500",
       quantity_stock: 25,
     });
 
@@ -46,7 +46,7 @@ describe("Testes das rotas de Produtos", () => {
       product_name: "Teste_Automatizado_EditadoPUT",
       categoryId: 2,
       description: "jajajajajajja",
-      valor: 355,
+      price: "355",
       quantity_stock: 33,
     });
     //   console.log(response.status, response.body.product_name);
@@ -86,7 +86,7 @@ describe("Testes das rotas de Categorias", () => {
     // Teste para a rota POST /api/categories
     it("Deve criar um novo Produto", async () => {
       const response = await request(app).post("/api/categories").send({
-        nome: "Teste_Corridinhas",
+        name: "Teste_Corridinhas",
       });
   
       expect(response.status).toBe(201); // 201 representando que o objeto foi criado no servidor.
@@ -113,12 +113,12 @@ describe("Testes das rotas de Categorias", () => {
     it("Deve atualizar uma Categoria existente", async () => {
       // console.log("O ID do produto é:",produtoId);
       const response = await request(app).put(`/api/categories/${categoriaId}`).send({
-        nome: "Teste_Corridona_EDITED",
+        name: "Teste_Corridona_EDITED",
       });
       //   console.log(response.status, response.body.product_name);
       expect(response.status).toBe(200);
       console.log("body das categorias", response.body);
-      expect(response.body.nome).toBe(
+      expect(response.body.name).toBe(
         "Teste_Corridona_EDITED"
       );
     });
