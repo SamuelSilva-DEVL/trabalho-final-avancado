@@ -56,6 +56,10 @@ const verifyUserByEmail = async (email) => {
 
 exports.createUser = async (req, res) => {
   const { name, email, password, image } = req.body;
+  const userByEmail = await verifyUserByEmail(email);
+  if (userByEmail.status === 200) {
+    return res.status(400).json({ error: "Email já cadastrado" });
+  }
 
   try {
     const saltRounds = 10;
