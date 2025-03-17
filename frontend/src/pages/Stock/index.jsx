@@ -1,39 +1,24 @@
 import { useEffect, useState } from "react"
 import BasicTable from "../../components/Table"
-
 import styles from "../Products/styles.module.css"
+import { getStock } from "../../services/stockServices"
 
 const headers = [
-  { field: "categorie", headerName: "Categoria produto" },
-  { field: "averageValue", headerName: "Valor médio" },
-  { field: "number", headerName: "Quantidade em estoque" },
+  { field: "categoryName", headerName: "Categoria produto" },
+  { field: "totalStock", headerName: "Quantidade em estoque" },
+  { field: "averageValues", headerName: "Valor médio" },
 ]
 
 export function Stock() {
-  const [stock, setStock] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+     const [stock, setStock] = useState([])
 
-  const listStock = JSON.parse(localStorage.getItem("stock")) || []
-
-  const updateItemsTable = (list) => {
-    setIsLoading(true)
-
-    //simulando um loading para atualizar estado da tabela
-    setTimeout(() => {
-      const rows =
-        list.map((stock) => ({
-          id: stock.id,
-          categorie: stock.categorie,
-          averageValue: stock.averageValue,
-          number: stock.number,
-        })) ?? []
-
-      setStock(rows)
-      setIsLoading(false)
-    }, 2 * 1000)
-  }
+const fetchStock = async () => {
+      const fetch = await getStock();
+      setStock(fetch);
+    }
+  
   useEffect(() => {
-    updateItemsTable(listStock)
+    fetchStock();
   }, [])
 
   return (
@@ -42,9 +27,7 @@ export function Stock() {
         <h2>Estoque</h2>
       </div>
 
-      {isLoading && <p>Carregando...</p>}
-
-      {!isLoading && <BasicTable headers={headers} rows={stock} />}
+      <BasicTable headers={headers} rows={stock} />
     </section>
   )
 }

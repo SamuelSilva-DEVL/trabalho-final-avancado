@@ -4,128 +4,117 @@ import {
   Button,
   Grid,
   Typography,
-  Box,
   Select,
   MenuItem,
   InputLabel,
   FormControl,
 } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
-import { v4 as uuidv4 } from "uuid"
-import { addProductForCategorie, updateProductForCategorie } from "@utils"
-
-const optionsCategories = [
-  {
-    id: 1,
-    label: "Tênis para corrida",
-    value: "tenis-para-corrida",
-  },
-  {
-    id: 2,
-    label: "Tênis para academia",
-    value: "tenis-para-academia",
-  },
-  {
-    id: 3,
-    label: "Sneakers",
-    value: "sneakers",
-  },
-]
+import {
+  createProduct,
+  getProductbyId,
+  updateProduct,
+} from "../../services/productsServices"
+import { getCategories } from "../../services/categoriesSevices"
+import { toast } from "react-toastify"
 
 export function CreateOrEditProduct() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
-    name: "",
+    product_name: "",
     description: "",
-    value: 0,
-    stock: 0,
-    image: null,
-    categorie: "",
+    price: 0,
+    quantity_stock: 0,
+    image: "",
+    categoryId: 0,
   })
 
-  const storedProducts = JSON.parse(localStorage.getItem("produtos")) || []
+  const [optionsCategories, setCategories] = useState([])
 
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result)
-      reader.onerror = (error) => reject(error)
-    })
+  const fetchCategories = async () => {
+    const fetch = await getCategories()
+    setCategories(fetch)
   }
 
   const handleChange = async (e) => {
     const { name, value } = e.target
-    if (name === "image") {
-      const file = e.target.files ? e.target.files[0] : null
 
-      const imageData = {
-        name: file.name,
-        urlImage: await convertToBase64(file),
-      }
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }))
+  }
 
-      setFormData((prevState) => ({
-        ...prevState,
-        image: imageData,
-      }))
-    } else {
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }))
+  const createNewProduct = async () => {
+    const data = {
+      product_name: formData.product_name,
+      description: formData.description,
+      price: formData.price,
+      quantity_stock: formData.quantity_stock,
+      categoryId: formData.categoryId,
+      image: formData.image,
     }
+
+    await createProduct(data).then(() => {
+      toast.success("Produto cadastrado com sucesso!")
+
+      navigate("/administrador")
+    })
+  }
+
+  const editProduct = async () => {
+    const data = {
+      product_name: formData.product_name,
+      description: formData.description,
+      price: formData.price,
+      quantity_stock: formData.quantity_stock,
+      categoryId: formData.categoryId,
+      image: formData.image,
+    }
+
+    await updateProduct(id, data).then(() => {
+      toast.success("Produto editado com sucesso!")
+
+      navigate("/administrador")
+    })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
     if (!id) {
-      const productId = uuidv4()
-
-      const productData = { id: productId, ...formData }
-
-      storedProducts.push(productData)
-
-      localStorage.setItem("produtos", JSON.stringify(storedProducts))
-
-      addProductForCategorie(productData)
+      createNewProduct()
     } else {
-      const productIndex = storedProducts.findIndex((p) => p.id === id)
-
-      const oldInformations = storedProducts[productIndex]
-
-      if (productIndex !== -1) {
-        storedProducts[productIndex] = {
-          ...storedProducts[productIndex],
-          ...formData,
-        }
-
-        localStorage.setItem("produtos", JSON.stringify(storedProducts))
-
-        updateProductForCategorie(storedProducts[productIndex], oldInformations)
-      }
+      editProduct()
     }
 
-    navigate("/administrador")
+    // navigate("/administrador")
+  }
+
+  const fetchProductById = async (id) => {
+    const response = await getProductbyId(id)
+
+    if (response) {
+      const product = response.data
+
+      const data = {
+        product_name: product.product_name,
+        description: product.description,
+        price: product.price,
+        quantity_stock: product.quantity_stock,
+        categoryId: product.categoryId,
+        image: product.image,
+      }
+
+      setFormData(data)
+    }
   }
 
   useEffect(() => {
+    fetchCategories()
     if (id) {
-      const product = storedProducts.find((p) => p.id === id)
-
-      if (product) {
-        const data = {
-          name: product.name,
-          description: product.description,
-          value: product.value,
-          stock: product.stock,
-          image: product.image,
-          categorie: product.categorie,
-        }
-
-        setFormData(data)
-      }
+      fetchProductById(id)
     }
   }, [id])
 
@@ -135,54 +124,23 @@ export function CreateOrEditProduct() {
         {id ? "Editar Produto" : "Cadastrar Produto"}
       </Typography>
 
-      <Grid item xs={12}>
-        <label
-          htmlFor="image"
-          style={{ fontFamily: "Helvetica medium, sans-serif" }}
-        >
-          Imagem do Produto
-        </label>
-        <input
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={handleChange}
-          style={{ display: "block", margin: "16px 0" }}
-        />
-        {formData.image && (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: "8px",
-              marginBottom: "16px",
-            }}
-          >
-            <Typography variant="body2" color="textSecondary">
-              {formData.image.name}
-            </Typography>
-            <Box
-              component="a"
-              href={formData.image.urlImage}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ display: "inline-block", marginTop: "8px" }}
-            >
-              <Typography variant="body2" color="primary">
-                Ver imagem
-              </Typography>
-            </Box>
-          </div>
-        )}
-      </Grid>
-
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField
+            label="Url Imagem"
+            name="image"
+            value={formData.image}
+            onChange={handleChange}
+            fullWidth
+            required
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
             label="Nome do Produto"
-            name="name"
-            value={formData.name}
+            name="product_name"
+            value={formData.product_name}
             onChange={handleChange}
             fullWidth
             required
@@ -203,9 +161,9 @@ export function CreateOrEditProduct() {
         <Grid item xs={12}>
           <TextField
             label="Valor"
-            name="value"
+            name="price"
             type="number"
-            value={formData.value}
+            value={formData.price}
             onChange={handleChange}
             fullWidth
             required
@@ -215,10 +173,10 @@ export function CreateOrEditProduct() {
         <Grid item xs={12}>
           <TextField
             label="Quantidade em estoque"
-            name="stock"
+            name="quantity_stock"
             type="number"
             defaultValue={1}
-            value={formData.stock}
+            value={formData.quantity_stock}
             onChange={handleChange}
             fullWidth
             required
@@ -228,17 +186,16 @@ export function CreateOrEditProduct() {
         <FormControl fullWidth sx={{ mt: 2, ml: 2 }}>
           <InputLabel id="demo-simple-select-label">Categoria</InputLabel>
           <Select
-            disabled={id.toString() !== null || undefined || "" || false}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             label="Categoria"
-            name="categorie"
-            value={formData.categorie}
+            name="categoryId"
+            value={formData.categoryId}
             onChange={handleChange}
           >
             {optionsCategories.map((option) => (
-              <MenuItem key={option.value} value={option.label}>
-                {option.label}
+              <MenuItem key={option.name} value={option.id}>
+                {option.name}
               </MenuItem>
             ))}
           </Select>

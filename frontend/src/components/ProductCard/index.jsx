@@ -12,18 +12,18 @@ export function ProductCard({ product }) {
         <CardMedia
           component="img"
           height="200"
-          image={product.image ? product.image.urlImage : ImageDefault}
+          image={product.image}
           alt={product.description}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {product.name}
+            {product.product_name}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            Valor: R$ {product.value}
+            Valor: R$ {product.price}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            Categoria: {product.categorie}
+            Categoria: {product.categoryName}
           </Typography>
           <Typography noWrap variant="body2" sx={{ color: "text.secondary" }}>
             {product.description}
