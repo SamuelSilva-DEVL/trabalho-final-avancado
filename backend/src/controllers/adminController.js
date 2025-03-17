@@ -155,3 +155,47 @@ exports.userLogin = async (req, res) => {
     res.status(500).json({ error: "Erro ao fazer login" });
   }
 };
+
+exports.userLogin = async (req, res) => {
+  const { email, password } = req.body;
+  if (!req.body || !email || !password) {
+    res.status(404).json({ error: "Invalid request body" });
+  }
+  try {
+    const verifyUser = await verifyUserByEmail(email);
+    // console.log(verifyUser.data.password);
+
+    const verifyPassword = await bcrypt.compare(
+      password,
+      verifyUser.data.password
+    );
+    console.log("Senha verificada", verifyPassword);
+    // console.log(checarSenha);
+    // await bcrypt.compare(senha_hash, verifyUser[0].hashPassword)
+    if (verifyPassword) {
+      const user = verifyUser.data;
+
+      const payload = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      };
+      // console.log(payload);
+
+      const token = jwt.sign(payload, jwtSecret, { expiresIn: "2h" });
+      // console.log(token)
+
+      res.json({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        token,
+      });
+    } else {
+        res.status(404).json({ error: "Usuário ou senha inválidos, verifique as informações e tente novamente mais tarde" });
+    }
+  } catch (error) {
+    console.error("erro ao fazer login:", error);
+    res.status(500).json({ error: "Erro ao fazer login" });
+  }
+};
