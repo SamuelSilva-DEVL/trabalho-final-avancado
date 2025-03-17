@@ -20,8 +20,9 @@ model products {
   categoryId Int
   category Categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   description String @db.VarChar(255)
-  valor Int
+  price Int
   quantity_stock Int
+  image String @default("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8lRbS7eKYzDq-Ftxc1p8G_TTw2unWBMEYUw&s")
 }
 
 model Categories {

@@ -13,26 +13,28 @@ try {
       quantity_stock: true,
     },
     _avg: {
-      valor: true,
+      price: true,
     },
     orderBy: {
       categoryId: "asc",
     },
-  });
+  })
 
   //pegando os nomes das categorias
   const categories = await prisma.categories.findMany({
     select: {
       id: true,
-      nome: true
-    }
-  });
+      nome: true,
+    },
+  })
 
-  const formattedStock = showStock.map(stockItem => ({
-    categoryName: categories.find(cat => cat.id === stockItem.categoryId)?.nome || "Desconhecido",
+  const formattedStock = showStock.map((stockItem) => ({
+    categoryName:
+      categories.find((cat) => cat.id === stockItem.categoryId)?.nome ||
+      "Desconhecido",
     totalStock: stockItem._sum.quantity_stock,
-    averageValues: stockItem._avg.valor
-  }));
+    averageValues: stockItem._avg.price,
+  }))
   res.json(formattedStock);
 
 } catch (error) {

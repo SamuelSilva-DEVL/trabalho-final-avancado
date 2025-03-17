@@ -1,9 +1,20 @@
 import { Box, Typography } from "@mui/material";
 import Carousel from 'react-material-ui-carousel';
 import { ProductCard } from "../ProductCard";
+import { useEffect, useState } from "react"
+import { getProducts } from "../../services/productsServices"
 
 export function CarouselSection() {
-  const products = JSON.parse(localStorage.getItem("produtos")) || []
+  const [products, setProducts] = useState([])
+
+  const fetchProducts = async () => {
+    const fetch = await getProducts()
+    setProducts(fetch)
+  }
+
+  useEffect(() => {
+    fetchProducts()
+  }, [])
 
   return (
     <Box
