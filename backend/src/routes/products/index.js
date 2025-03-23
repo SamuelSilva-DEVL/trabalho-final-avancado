@@ -1,5 +1,6 @@
 const express = require("express")
 const router = express.Router()
+const { verifyToken } = require("../../middlewares/tokenMiddleware")
 
 const {
   getProducts,
@@ -27,13 +28,13 @@ router.get("/products/:id", async (req, res) => {
   res.status(200).json(findProduct)
 })
 
-router.post("/products", async (req, res) => {
+router.post("/products", verifyToken, async (req, res) => {
   const data = await createProduct(req.body)
 
   res.status(201).json(data)
 })
 
-router.put("/products/:id", async (req, res) => {
+router.put("/products/:id", verifyToken, async (req, res) => {
   const id_product = parseInt(req.params.id)
 
   const findProduct = await getProductbyId(id_product)
@@ -49,7 +50,7 @@ router.put("/products/:id", async (req, res) => {
     .json({ message: "Produto atualizado com sucesso", data: dataUpdate })
 })
 
-router.delete("/products/:id", async (req, res) => {
+router.delete("/products/:id", verifyToken, async (req, res) => {
   const id_product = parseInt(req.params.id)
 
   try {
