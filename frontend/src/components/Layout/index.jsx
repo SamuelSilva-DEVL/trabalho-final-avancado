@@ -1,12 +1,15 @@
+import { useState, useMemo } from "react"
 import { createTheme } from "@mui/material/styles"
 import { AppProvider } from "@toolpad/core/AppProvider"
 import { DashboardLayout } from "@toolpad/core/DashboardLayout"
-import { useDemoRouter } from "@toolpad/core/internal"
 import { Outlet, useNavigate } from "react-router-dom"
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import LogoutIcon from "@mui/icons-material/Logout"
 import InventoryIcon from "@mui/icons-material/Inventory"
 import { useAuth } from "../../contexts/AuthContext"
+import { Typography, Box, Avatar } from "@mui/material"
+
+import "./layout.css"
 
 const demoTheme = createTheme({
   cssVariables: {
@@ -24,10 +27,28 @@ const demoTheme = createTheme({
   },
 })
 
+function useDemoRouter(initialPath) {
+  const useNavigatePath = useNavigate()
+  const [pathname, setPathname] = useState(initialPath)
+
+  const router = useMemo(() => {
+    return {
+      pathname,
+      searchParams: new URLSearchParams(),
+      navigate: (path) => {
+        setPathname(String(path)), useNavigatePath(String(path))
+      },
+    }
+  }, [pathname])
+
+  return router
+}
+
 function DashboardLayoutBasic() {
   const router = useDemoRouter("/administrador")
-  const navigate = useNavigate()
-  const { logout } = useAuth()
+  const { logout, user } = useAuth()
+
+  const IMAGE_USER = localStorage.getItem("@Image_user")
 
   const logoutAction = () => {
     logout()
@@ -82,20 +103,36 @@ function DashboardLayoutBasic() {
   return (
     <AppProvider
       navigation={NAVIGATION}
-      router={{
-        ...router,
-        navigate(path) {
-          navigate(path)
-        },
-      }}
+      router={router}
       theme={demoTheme}
       branding={{
         logo: "",
         title: "AVANTI",
-        homeUrl: "/",
+        homeUrl: "/administrador",
       }}
     >
-      <DashboardLayout>
+      <DashboardLayout
+        branding={{
+          title: (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 1,
+              }}
+              className="navbar-layout"
+            >
+              AVANTI
+              <Avatar
+                alt={`Imagem Usuário`}
+                src={IMAGE_USER}
+                sx={{ zIndex: 1, pointerEvents: "none" }}
+              />
+            </Box>
+          ),
+        }}
+      >
         <Outlet />
       </DashboardLayout>
     </AppProvider>
