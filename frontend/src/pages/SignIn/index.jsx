@@ -19,17 +19,17 @@ export function SignIn() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const result = login(email, password);
-   
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    const result = await login(email, password)
+
     if (!result.success) {
       setError(result.message)
     } else {
       setError("")
       navigate("/administrador")
     }
-  };
+  }
 
   return (
     <Container
@@ -60,6 +60,7 @@ export function SignIn() {
             autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onFocus={() => setError("")}
           />
           <TextField
             margin="normal"
@@ -72,6 +73,7 @@ export function SignIn() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onFocus={() => setError("")}
           />
           {error && <Alert severity="error">{error}</Alert>}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
@@ -80,5 +82,5 @@ export function SignIn() {
         </Box>
       </Box>
     </Container>
-  );
+  )
 }

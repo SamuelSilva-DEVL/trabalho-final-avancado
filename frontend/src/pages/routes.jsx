@@ -4,7 +4,7 @@ import { Home, SignIn, Products, CreateOrEditProduct, Stock } from "@pages"
 import { Navigate } from "react-router-dom"
 
 const ValidateReplace = () => {
-  const userLogged = localStorage.getItem("App:user") || null
+  const userLogged = localStorage.getItem("@App:T") || null
 
   if (userLogged) {
     return <DashboardLayoutBasic />
