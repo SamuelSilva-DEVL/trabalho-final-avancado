@@ -1,43 +1,36 @@
-// require('dotenv').config();
-// const jwtSecret = process.env.JWT_SECRET;
-// const jwt = require('jsonwebtoken');
+const { Admin } = require("../models/adminModel")
+const jwt = require("jsonwebtoken")
 
+const JWT_SECRET = process.env.JWT_SECRET ?? ""
 
-// const verifyToken = (req, res, next) => {
-//     const token = req.headers.authorization;
-//     if (!token) {
-//         return res.status(401).json({ message: 'Token de acesso não fornecido' });
-//     }
-//     const jwtToken = token.replace('Bearer ', '');
-//     jwt.verify(jwtToken, jwtSecret, (err, decoded) => {
-//         if (err) {
-//             return res.status(401).json({ message: 'Token de acesso inválido' });
-//         }
-//         req.user = decoded;
-//         next();
-//     });
-// };
+const verifyToken = async (req, res, next) => {
+  try {
+    const { authorization } = req.headers
 
-// const verifyAdminRoleToken = (req, res, next) => {
-//     const token = req.headers.authorization;
-//     if (!token) {
-//         return res.status(401).json({ message: 'Access token not provided' });
-//     }
+    if (!authorization) {
+      return res.status(401).json({ error: "Não autorizado" })
+    }
 
-//     const jwtToken = token.replace('Bearer ', '');
-//     jwt.verify(jwtToken, jwtSecret, (err, decoded) => {
-//         if (err) {
-//             return res.status(401).json({ message: 'Invalid access token' });
-//         }
+    const token = authorization.split(" ")[1]
 
-//         if (decoded.role !== 0) {
-//             return res.status(403).json({ message: 'Only users with role 0 can perform this action' });
-//         }
+    const { id } = jwt.verify(token, JWT_SECRET)
 
-//         req.user = decoded;
-//         next();
-//     });
-// };
+    const user = await Admin.findUnique({
+      where: { id: String(id) },
+    })
 
+    if (!user) {
+      return res.status(401).json({ error: "Não autorizado" })
+    }
 
-// module.exports = {verifyToken, verifyAdminRoleToken};
+    const { password: _, ...loggedUser } = user
+
+    req.user = loggedUser
+
+    next()
+  } catch (error) {
+    return res.status(401).json({ error: "Não autorizado" })
+  }
+}
+
+module.exports = { verifyToken }
