@@ -7,25 +7,52 @@ import ImageDefault from "@assets/sem_imagem.png"
 
 export function ProductCard({ product }) {
   return (
-    <Card sx={{ width: "100%", maxWidth: 364 }}>
+    <Card
+      sx={{
+        width: "100%",
+        minWidth: 300,
+        maxWidth: 364,
+        maxHeight: 550,
+        marginBottom: 5,
+      }}
+    >
       <CardActionArea>
         <CardMedia
           component="img"
-          height="200"
-          image={product.image}
+          image={product.image || ImageDefault}
           alt={product.description}
+          sx={{ height: 350, objectFit: "contain" }}
         />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+        <CardContent sx={{ height: 200 }}>
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="div"
+            sx={{
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 2,
+            }}
+          >
             {product.product_name}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            Valor: R$ {product.price}
+            <strong>Valor:</strong> R$ {product.price}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            Categoria: {product.categoryName}
+            <strong>Categoria:</strong> {product.categoryName}
           </Typography>
-          <Typography noWrap variant="body2" sx={{ color: "text.secondary" }}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: "text.secondary",
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 2,
+            }}
+          >
             {product.description}
           </Typography>
         </CardContent>

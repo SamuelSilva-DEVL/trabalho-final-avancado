@@ -3,6 +3,7 @@ import Carousel from 'react-material-ui-carousel';
 import { ProductCard } from "../ProductCard";
 import { useEffect, useState } from "react"
 import { getProducts } from "../../services/productsServices"
+import { SwiperProducts } from "../SwiperProducts"
 
 export function CarouselSection() {
   const [products, setProducts] = useState([])
@@ -19,13 +20,12 @@ export function CarouselSection() {
   return (
     <Box
       sx={{
+        maxWidth: "100vw",
         backgroundColor: "white",
         color: "black",
         textAlign: "center",
         py: 8,
         px: 4,
-        maxWidth: 600,
-        margin: "auto",
       }}
     >
       <Typography
@@ -36,22 +36,9 @@ export function CarouselSection() {
       >
         NOSSOS PRODUTOS POPULARES
       </Typography>
-      <Carousel
-        autoPlay={false}
-        navButtonsAlwaysVisible
-        navButtonsProps={{
-          style: {
-            backgroundColor: "#007bff",
-            color: "white",
-          },
-        }}
-      >
-        {products?.map((product, index) => (
-          <Box key={index} sx={{ display: "flex", justifyContent: "center" }}>
-            <ProductCard product={product} />
-          </Box>
-        ))}
-      </Carousel>
+      <Box sx={{ width: "100%" }}>
+        <SwiperProducts products={products} />
+      </Box>
     </Box>
   )
 }
