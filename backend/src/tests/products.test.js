@@ -1,25 +1,37 @@
 const { app, server } = require("../server");
 const request = require("supertest");
+const jwt = require("jsonwebtoken");
 
 afterAll(async () => {
   //await prisma.$disconnect(); // Fecha a conexão com o banco de dados
   server.close(); // Encerra o servidor Express
 });
 
-describe("Testes das rotas de Produtos", () => {
+describe("Testes das rotas de Produtos com Auth", () => {
+  // utilizar um userId(UUID) do banco de dados.
+  const JWT_SECRET = process.env.JWT_SECRET ?? ""
+  const token = jwt.sign({ userId: "cc1973f5-7bf1-4fcc-9ea8-29a3e00d6b3f" }, JWT_SECRET, {
+    expiresIn: "1h",
+  });
+  const token1 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM0ZmU2OTI4LTU3MzAtNDk3Ni1hMDhkLTAwY2VmODE4YmEyMSIsImlhdCI6MTc0Mjk4NTk0NCwiZXhwIjoxNzQzMDE0NzQ0fQ.JOuyqDRJ6nkjR6JWUjsl75leshqu6YqKIzLRdjnjpDA"
   let produtoId;
 
   // Teste para a rota POST /api/products
-  it("Deve criar um novo Produto", async () => {
-    const response = await request(app).post("/api/products").send({
-      product_name: "Teste_Automatizado_Tenis00006",
-      categoryId: 5,
-      description: "gadfgagasdasdfafg",
-      price: "500",
-      quantity_stock: 25,
-    });
+  it("Deve criar um novo Produto (201)", async () => {
+    const response = await request(app)
+      .post("/api/products")
+      .set("Authorization", `Bearer ${token1}`)
+      .send({
+        product_name: "Teste_Automatizado_Tenis00fdff006",
+        categoryId: 5,
+        description: "gadfgagasdasdfafg",
+        price: "500",
+        quantity_stock: 25,
+      })
+      .expect(201);
+    // console.log(token);
 
-    expect(response.status).toBe(201); // 201 representando que o objeto foi criado no servidor.
+    // expect(response.status).toBe(201); // 201 representando que o objeto foi criado no servidor.
     expect(response.body).toHaveProperty("id");
     produtoId = response.body.id;
     // Salva o ID para usar nos próximos testes

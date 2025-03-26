@@ -4,7 +4,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import CardActionArea from "@mui/material/CardActionArea";
 import ImageDefault from "@assets/sem_imagem.png";
-import { ButtonCart } from "../ButtonCart";
+// import { ButtonCart } from "../ButtonCart";
 
 export function ProductCard({ product }) {
   return (
@@ -57,12 +57,12 @@ export function ProductCard({ product }) {
             {product.description}
           </Typography>
         </CardContent>
-        <ButtonCart
+        {/* <ButtonCart
           productLink={product.id}
           sx={{
             marginBottom: 5,
           }}
-        />
+        /> */}
       </CardActionArea>
     </Card>
   );

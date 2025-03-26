@@ -2,7 +2,7 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import { ProductCard } from "../ProductCard";
-// import { ButtonCart } from "../ButtonCart";
+import { ButtonCart } from "../ButtonCart";
 
 // Import Swiper styles
 import "swiper/css";
@@ -37,7 +37,7 @@ export function SwiperProducts({ products }) {
             marginBottom: 5,
           }}>
             <ProductCard product={product} />
-            {/* <ButtonCart productLink={product.id} /> */}
+            <ButtonCart productLink={product.id} />
           </Box>
         </SwiperSlide>
       ))}
