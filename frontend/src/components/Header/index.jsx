@@ -12,8 +12,11 @@ import Button from "@mui/material/Button"
 import Tooltip from "@mui/material/Tooltip"
 import MenuItem from "@mui/material/MenuItem"
 import AdbIcon from "@mui/icons-material/Adb"
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 
 import ImageLogo from "@assets/logo_avanti2.png"
+
+import { ShoppigCart } from "../ShoppingCart"
 
 const pages = ["Início", "Produtos", "Fale conosco"]
 const settings = ["Profile", "Account", "Dashboard", "Logout"]
@@ -21,6 +24,8 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"]
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
+
+  const [openDrawer, setOpenDrawer] = React.useState(false)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget)
@@ -40,7 +45,10 @@ function Header() {
   return (
     <AppBar position="static" style={{ width: "100vw !important" }}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar
+          disableGutters
+          sx={{ display: "flex", justifyContent: "center" }}
+        >
           <Typography
             variant="h6"
             noWrap
@@ -61,8 +69,8 @@ function Header() {
 
           <Box
             sx={{
-              flexGrow: 1,
               display: { xs: "flex", md: "none" },
+              border: "2px solid black",
             }}
           >
             <IconButton
@@ -98,6 +106,7 @@ function Header() {
               ))}
             </Menu>
           </Box>
+
           <Typography
             variant="h5"
             noWrap
@@ -121,8 +130,8 @@ function Header() {
             sx={{
               flexGrow: 1,
               display: { xs: "none", md: "flex" },
+              justifyContent: "center",
             }}
-            style={{ justifyContent: "end" }}
           >
             {pages.map((page) => (
               <Button
@@ -133,6 +142,19 @@ function Header() {
                 {page}
               </Button>
             ))}
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <ShoppingCartIcon
+              onClick={() => setOpenDrawer(true)}
+              sx={{ cursor: "pointer" }}
+              size="large"
+            />
+
+            <ShoppigCart
+              open={openDrawer}
+              onClose={() => setOpenDrawer(false)}
+            />
           </Box>
         </Toolbar>
       </Container>
