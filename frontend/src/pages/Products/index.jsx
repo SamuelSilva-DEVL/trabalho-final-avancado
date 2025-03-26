@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import BasicTable from "../../components/Table"
 import Button from "@mui/material/Button"
-import { deleteProductForCategorie } from "@utils"
 import { getProducts, deleteProduct } from "../../services/productsServices"
 
 import styles from "./styles.module.css"

@@ -1,13 +1,15 @@
-import React from "react"
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Pagination, Navigation } from "swiper/modules"
-import { ProductCard } from "../ProductCard"
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper/modules";
+import { ProductCard } from "../ProductCard";
+// import { ButtonCart } from "../ButtonCart";
 
 // Import Swiper styles
-import "swiper/css"
-import "swiper/css/pagination"
-import "swiper/css/navigation"
-import "./styles.css"
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "./styles.css";
+import { Box } from "@mui/material";
 
 export function SwiperProducts({ products }) {
   return (
@@ -30,9 +32,15 @@ export function SwiperProducts({ products }) {
     >
       {products?.map((product, index) => (
         <SwiperSlide key={index}>
-          <ProductCard product={product} />
+          <Box
+          sx={{
+            marginBottom: 5,
+          }}>
+            <ProductCard product={product} />
+            {/* <ButtonCart productLink={product.id} /> */}
+          </Box>
         </SwiperSlide>
       ))}
     </Swiper>
-  )
+  );
 }

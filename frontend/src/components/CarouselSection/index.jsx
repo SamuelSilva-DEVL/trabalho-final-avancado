@@ -24,7 +24,7 @@ export function CarouselSection() {
         backgroundColor: "white",
         color: "black",
         textAlign: "center",
-        py: 8,
+        py: 6,
         px: 4,
       }}
     >
