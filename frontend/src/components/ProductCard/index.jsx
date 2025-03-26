@@ -22,10 +22,9 @@ export function ProductCard({ product }) {
           component="img"
           image={product.image || ImageDefault}
           alt={product.description}
-          sx={{ maxWidth: 364,
-            maxHeight: 364, objectFit: "contain" }}
+          sx={{ maxWidth: 364, maxHeight: 364, objectFit: "contain", }}
         />
-        <CardContent sx={{ height: 200 }}>
+        <CardContent sx={{ height: 185 }}>
           <Typography
             gutterBottom
             variant="h5"
@@ -58,7 +57,12 @@ export function ProductCard({ product }) {
             {product.description}
           </Typography>
         </CardContent>
-        <ButtonCart productLink={product.id}/>
+        <ButtonCart
+          productLink={product.id}
+          sx={{
+            marginBottom: 5,
+          }}
+        />
       </CardActionArea>
     </Card>
   );
